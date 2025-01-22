@@ -1,8 +1,7 @@
 // Données des produits
 const products = [
-  { id: 1, name: "Produit A", price: 10 },
-  { id: 2, name: "Produit B", price: 20 },
-  { id: 3, name: "Produit C", price: 15 },
+  { id: 1, name: "Carte du site web", price: 2, image: "face1.png", description: "Une carte détaillée de votre site web pour une meilleure navigation." },
+  // Ajoutez d'autres produits ici
 ];
 
 // Panier
@@ -28,12 +27,15 @@ products.forEach(product => {
   const productDiv = document.createElement("div");
   productDiv.classList.add("product");
   productDiv.innerHTML = `
+    <img src="${product.image}" alt="${product.name}" style="width: 100px; height: 100px; object-fit: cover;" />
     <h3>${product.name}</h3>
+    <p>${product.description}</p>
     <p>Prix : ${product.price} €</p>
     <button onclick="addToCart(${product.id})">Ajouter au panier</button>
   `;
   productList.appendChild(productDiv);
 });
+
 
 // Ajouter un produit au panier
 function addToCart(productId) {
