@@ -8,7 +8,7 @@ const products = [
 let cart = [];
 
 // Solde utilisateur
-let userBalance = 0;  // Solde initial à 0
+let userBalance = 0; // Solde initial à 0
 
 // Sélection des éléments du DOM
 const productList = document.querySelector(".product-list");
@@ -36,7 +36,6 @@ products.forEach(product => {
   productList.appendChild(productDiv);
 });
 
-
 // Ajouter un produit au panier
 function addToCart(productId) {
   const product = products.find(p => p.id === productId);
@@ -50,6 +49,22 @@ function addToCart(productId) {
   updateCart();
 }
 
+// Réduire une quantité ou supprimer un produit du panier
+function removeFromCart(productId) {
+  const productIndex = cart.findIndex(item => item.id === productId);
+
+  if (productIndex !== -1) {
+    cart[productIndex].quantity--;
+
+    // Si la quantité atteint zéro, retirer l'article du panier
+    if (cart[productIndex].quantity <= 0) {
+      cart.splice(productIndex, 1);
+    }
+
+    updateCart();
+  }
+}
+
 // Affichage du panier
 function updateCart() {
   cartItems.innerHTML = "";
@@ -57,12 +72,14 @@ function updateCart() {
 
   cart.forEach(item => {
     total += item.price * item.quantity;
+
     const cartItemDiv = document.createElement("div");
     cartItemDiv.classList.add("cart-item");
     cartItemDiv.innerHTML = `
       <h4>${item.name}</h4>
       <p>Prix : ${item.price} €</p>
       <p>Quantité : ${item.quantity}</p>
+      <button onclick="removeFromCart(${item.id})">Supprimer une quantité</button>
     `;
     cartItems.appendChild(cartItemDiv);
   });
@@ -87,7 +104,7 @@ closePopupButton.addEventListener("click", () => {
 checkoutButton.addEventListener("click", () => {
   const total = parseFloat(cartTotal.textContent);
   if (total <= userBalance) {
-    userBalance -= total; // Deduction du solde
+    userBalance -= total; // Déduction du solde
     alert(`Commande passée avec succès ! Votre nouveau solde est de ${userBalance} €.`);
     cart = []; // Vider le panier après la commande
     updateCart();
