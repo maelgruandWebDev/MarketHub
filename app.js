@@ -105,7 +105,7 @@ checkoutButton.addEventListener("click", () => {
   const total = parseFloat(cartTotal.textContent);
   if (total <= userBalance) {
     userBalance -= total; // Déduction du solde
-    alert(`Commande passée ` , $[total] `de avec succès ! Votre nouveau solde est de ${userBalance} €.`);
+    alert(`Commande passée de ${total} € avec succès ! Votre nouveau solde est de ${userBalance} €.`);
     cart = []; // Vider le panier après la commande
     updateCart();
   } else {
