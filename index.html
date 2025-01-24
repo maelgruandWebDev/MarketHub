@@ -29,29 +29,7 @@
     <button id="close-popup">Fermer</button>
   </div>
 
-  <!-- Firebase SDK -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyD4NK-ninNpR34kzJsMt3nQLHE862_6vRs",
-      authDomain: "markethub-fdbe1.firebaseapp.com",
-      projectId: "markethub-fdbe1",
-      storageBucket: "markethub-fdbe1.appspot.com",
-      messagingSenderId: "815393422637",
-      appId: "1:815393422637:web:19422d413ebb36081227a4",
-      measurementId: "G-BD6YC9FNW5"
-    };
-
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    export { db, collection, addDoc, getDocs };
-  </script>
-
-  <!-- App JS -->
-  <script type="module" src="app.js"></script>
+ 
+  <script src="app.js"></script>
 </body>
 </html>
