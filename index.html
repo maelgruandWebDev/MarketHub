@@ -1,62 +1,57 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Markethub</title>
+  <title>MarketHub</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="icon" href="icon.png">
 </head>
 <body>
   <header>
-    <h1>Markethub</h1>
-    <nav>
-      <a href="#products">Produits</a>
-      <a href="#cart" id="open-cart">Mon Panier</a>
-    </nav>
+    <h1>MarketHub</h1>
+    <div class="balance">
+      <input type="number" id="balance-input" placeholder="Entrez votre solde">
+      <button id="set-balance-button">Valider le solde</button>
+    </div>
+    <p>Votre solde : <span id="user-balance">0</span> €</p>
+    <button id="open-cart">Mon Panier</button>
   </header>
 
   <main>
-    <!-- Section pour définir le solde -->
-    <section id="set-balance" class="balance">
-      <h2>Entrez votre solde :</h2>
-      <input type="number" id="balance-input" placeholder="Entrez votre solde" min="0" />
-      <button id="set-balance-button">Valider</button>
-    </section>
-
-    <!-- Solde utilisateur -->
-    <section id="balance">
-      <h2>Solde : <span id="user-balance">0</span> €</h2> <!-- Solde initial -->
-    </section>
-
-    <!-- Section Produits -->
-    <section id="products">
-      <h2>Produits disponibles</h2>
-      <div class="product-list">
-        <!-- Les produits seront ajoutés dynamiquement -->
-      </div>
-    </section>
+    <section class="product-list"></section>
   </main>
 
-  <!-- Popup du panier -->
-  <div id="cart-popup" class="cart-popup">
-    <div class="popup-content">
-      <h2>Mon Panier</h2>
-      <div class="cart-items">
-        <!-- Les articles du panier seront affichés ici -->
-      </div>
-      <div class="cart-total">
-        Total : <span id="cart-total">0</span> €
-      </div>
-      <button id="checkout-button">Passer la commande</button>
-      <button id="close-popup">Fermer</button>
-    </div>
+  <div id="cart-popup" class="popup">
+    <h2>Mon Panier</h2>
+    <div class="cart-items"></div>
+    <p>Total : <span id="cart-total">0</span> €</p>
+    <button id="checkout-button">Passer la commande</button>
+    <button id="close-popup">Fermer</button>
   </div>
 
-  <footer>
-    <p>&copy; 2025 Marketplace, Tous droits réservé</p>
-  </footer>
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
 
-  <script src="app.js"></script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyD4NK-ninNpR34kzJsMt3nQLHE862_6vRs",
+      authDomain: "markethub-fdbe1.firebaseapp.com",
+      projectId: "markethub-fdbe1",
+      storageBucket: "markethub-fdbe1.appspot.com",
+      messagingSenderId: "815393422637",
+      appId: "1:815393422637:web:19422d413ebb36081227a4",
+      measurementId: "G-BD6YC9FNW5"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    export { db, collection, addDoc, getDocs };
+  </script>
+
+  <!-- App JS -->
+  <script type="module" src="app.js"></script>
 </body>
 </html>

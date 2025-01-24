@@ -1,14 +1,8 @@
-// Données des produits
-const products = [
-  { id: 1, name: "Carte du site web", price: 2, image: "face1.png", description: "Une carte détaillée de votre site web pour une meilleure navigation." },
-  // Ajoutez d'autres produits ici
-];
+import { db, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
 
 // Panier
 let cart = [];
-
-// Solde utilisateur
-let userBalance = 0; // Solde initial à 0
+let userBalance = 0; // Solde utilisateur
 
 // Sélection des éléments du DOM
 const productList = document.querySelector(".product-list");
@@ -22,110 +16,116 @@ const checkoutButton = document.getElementById("checkout-button");
 const setBalanceButton = document.getElementById("set-balance-button");
 const balanceInput = document.getElementById("balance-input");
 
-// Affichage des produits
-products.forEach(product => {
-  const productDiv = document.createElement("div");
-  productDiv.classList.add("product");
-  productDiv.innerHTML = `
-    <img src="${product.image}" alt="${product.name}" style="width: 100px; height: 100px; object-fit: cover;" />
-    <h3>${product.name}</h3>
-    <p>${product.description}</p>
-    <p>Prix : ${product.price} €</p>
-    <button onclick="addToCart(${product.id})">Ajouter au panier</button>
-  `;
-  productList.appendChild(productDiv);
-});
+// Ajouter des produits à Firestore
+async function addProductToFirestore(name, price) {
+  try {
+    const docRef = await addDoc(collection(db, "products"), {
+      name: name,
+      price: price,
+    });
+    console.log("Produit ajouté avec ID : ", docRef.id);
+  } catch (error) {
+    console.error("Erreur lors de l'ajout du produit : ", error);
+  }
+}
 
-// Ajouter un produit au panier
-function addToCart(productId) {
-  const product = products.find(p => p.id === productId);
+// Récupérer les produits depuis Firestore
+async function fetchProductsFromFirestore() {
+  const querySnapshot = await getDocs(collection(db, "products"));
+  const products = [];
+  querySnapshot.forEach((doc) => {
+    products.push({ id: doc.id, ...doc.data() });
+  });
+  return products;
+}
+
+// Afficher les produits
+async function displayProducts() {
+  const products = await fetchProductsFromFirestore();
+  productList.innerHTML = ""; // Réinitialiser la liste
+  products.forEach((product) => {
+    const productDiv = document.createElement("div");
+    productDiv.classList.add("product");
+    productDiv.innerHTML = `
+      <h3>${product.name}</h3>
+      <p>Prix : ${product.price} €</p>
+      <button onclick="addToCart('${product.id}', '${product.name}', ${product.price})">Ajouter au panier</button>
+    `;
+    productList.appendChild(productDiv);
+  });
+}
+
+// Ajouter au panier
+function addToCart(productId, name, price) {
   const existingItem = cart.find(item => item.id === productId);
 
   if (existingItem) {
     existingItem.quantity++;
   } else {
-    cart.push({ ...product, quantity: 1 });
+    cart.push({ id: productId, name, price, quantity: 1 });
   }
   updateCart();
 }
 
-// Réduire une quantité ou supprimer un produit du panier
+// Supprimer du panier
 function removeFromCart(productId) {
   const productIndex = cart.findIndex(item => item.id === productId);
-
   if (productIndex !== -1) {
     cart[productIndex].quantity--;
-
-    // Si la quantité atteint zéro, retirer l'article du panier
     if (cart[productIndex].quantity <= 0) {
       cart.splice(productIndex, 1);
     }
-
     updateCart();
   }
 }
 
-// Affichage du panier
+// Mettre à jour le panier
 function updateCart() {
   cartItems.innerHTML = "";
   let total = 0;
 
   cart.forEach(item => {
     total += item.price * item.quantity;
-
     const cartItemDiv = document.createElement("div");
     cartItemDiv.classList.add("cart-item");
     cartItemDiv.innerHTML = `
       <h4>${item.name}</h4>
       <p>Prix : ${item.price} €</p>
       <p>Quantité : ${item.quantity}</p>
-      <button onclick="removeFromCart(${item.id})">Supprimer une quantité</button>
+      <button onclick="removeFromCart('${item.id}')">Supprimer</button>
     `;
     cartItems.appendChild(cartItemDiv);
   });
 
   cartTotal.textContent = total;
-
-  // Mise à jour du solde
   userBalanceElement.textContent = userBalance - total;
 }
-
-// Ouvrir la popup du panier
-openCartButton.addEventListener("click", () => {
-  cartPopup.style.display = "flex";
-});
-
-// Fermer la popup
-closePopupButton.addEventListener("click", () => {
-  cartPopup.style.display = "none";
-});
 
 // Passer la commande
 checkoutButton.addEventListener("click", () => {
   const total = parseFloat(cartTotal.textContent);
   if (total <= userBalance) {
-    userBalance -= total; // Déduction du solde
-    alert(`Commande passée avec succès ! Votre nouveau solde est de ${userBalance} €.`);
-    cart = []; // Vider le panier après la commande
+    userBalance -= total;
+    alert("Commande passée !");
+    cart = [];
     updateCart();
   } else {
-    alert("Solde insuffisant pour passer la commande.");
+    alert("Solde insuffisant !");
   }
 });
 
 // Définir le solde
 setBalanceButton.addEventListener("click", () => {
   const balance = parseFloat(balanceInput.value);
-  if (isNaN(balance) || balance < 0) {
-    alert("Veuillez entrer un montant valide pour votre solde.");
-  } else {
+  if (!isNaN(balance) && balance >= 0) {
     userBalance = balance;
     userBalanceElement.textContent = userBalance;
-    balanceInput.disabled = true; // Désactiver l'input après la saisie
-    setBalanceButton.disabled = true; // Désactiver le bouton
-    alert("Solde mis à jour avec succès ! Votre nouveau solde est de " + userBalance + " €.");
-    setBalanceButton.style.display = "none";
-    balanceInput.style.display = "none";
-    document.querySelector(".balance").style.display = "none";
+    balanceInput.disabled = true;
+    setBalanceButton.disabled = true;
+  } else {
+    alert("Montant invalide !");
   }
 });
+
+// Charger les produits au démarrage
+document.addEventListener("DOMContentLoaded", displayProducts);
