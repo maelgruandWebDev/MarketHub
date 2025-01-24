@@ -1,87 +1,62 @@
-  <!DOCTYPE html>
-  <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Markethub</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="icon.png">
-  </head>
-  <body>
-    <header>
-      <h1>Markethub</h1>
-      <nav>
-        <a href="#products">Produits</a>
-        <a href="#cart" id="open-cart">Mon Panier</a>
-      </nav>
-    </header>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Markethub</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="icon.png">
+</head>
+<body>
+  <header>
+    <h1>Markethub</h1>
+    <nav>
+      <a href="#products">Produits</a>
+      <a href="#cart" id="open-cart">Mon Panier</a>
+    </nav>
+  </header>
 
-    <main>
-      <!-- Section pour définir le solde -->
-      <section id="set-balance" class="balance">
-        <h2>Entrez votre solde :</h2>
-        <input type="number" id="balance-input" placeholder="Entrez votre solde" min="0" />
-        <button id="set-balance-button">Valider</button>
-      </section>
+  <main>
+    <!-- Section pour définir le solde -->
+    <section id="set-balance" class="balance">
+      <h2>Entrez votre solde :</h2>
+      <input type="number" id="balance-input" placeholder="Entrez votre solde" min="0" />
+      <button id="set-balance-button">Valider</button>
+    </section>
 
-      <!-- Solde utilisateur -->
-      <section id="balance">
-        <h2>Solde : <span id="user-balance">0</span> €</h2> <!-- Solde initial -->
-      </section>
+    <!-- Solde utilisateur -->
+    <section id="balance">
+      <h2>Solde : <span id="user-balance">0</span> €</h2> <!-- Solde initial -->
+    </section>
 
-      <!-- Section Produits -->
-      <section id="products">
-        <h2>Produits disponibles</h2>
-        <div class="product-list">
-          <!-- Les produits seront ajoutés dynamiquement -->
-        </div>
-      </section>
-    </main>
-
-    <!-- Popup du panier -->
-    <div id="cart-popup" class="cart-popup">
-      <div class="popup-content">
-        <h2>Mon Panier</h2>
-        <div class="cart-items">
-          <!-- Les articles du panier seront affichés ici -->
-        </div>
-        <div class="cart-total">
-          Total : <span id="cart-total">0</span> €
-        </div>
-        <button id="checkout-button">Passer la commande</button>
-        <button id="close-popup">Fermer</button>
+    <!-- Section Produits -->
+    <section id="products">
+      <h2>Produits disponibles</h2>
+      <div class="product-list">
+        <!-- Les produits seront ajoutés dynamiquement -->
       </div>
+    </section>
+  </main>
+
+  <!-- Popup du panier -->
+  <div id="cart-popup" class="cart-popup">
+    <div class="popup-content">
+      <h2>Mon Panier</h2>
+      <div class="cart-items">
+        <!-- Les articles du panier seront affichés ici -->
+      </div>
+      <div class="cart-total">
+        Total : <span id="cart-total">0</span> €
+      </div>
+      <button id="checkout-button">Passer la commande</button>
+      <button id="close-popup">Fermer</button>
     </div>
+  </div>
 
-    <footer>
-      <p>&copy; 2025 Marketplace, Tous droits réservé</p>
-    </footer>
+  <footer>
+    <p>&copy; 2025 Marketplace, Tous droits réservé</p>
+  </footer>
 
-    <script src="app.js"></script>
-    <script type="module">
-      // Import Firebase SDK
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
-      import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-analytics.js";
-      import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
-    
-      // Configuration Firebase
-      const firebaseConfig = {
-        apiKey: "AIzaSyD4NK-ninNpR34kzJsMt3nQLHE862_6vRs",
-        authDomain: "markethub-fdbe1.firebaseapp.com",
-        projectId: "markethub-fdbe1",
-        storageBucket: "markethub-fdbe1.appspot.com",
-        messagingSenderId: "815393422637",
-        appId: "1:815393422637:web:19422d413ebb36081227a4",
-        measurementId: "G-BD6YC9FNW5"
-      };
-    
-      // Initialisation Firebase
-      const app = initializeApp(firebaseConfig);
-      const analytics = getAnalytics(app);
-    
-      // Initialisation Firestore (base de données)
-      const db = getFirestore(app);
-    </script>
-    
-  </body>
-  </html>
+  <script src="app.js"></script>
+</body>
+</html>
