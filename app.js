@@ -103,11 +103,22 @@ closePopupButton.addEventListener("click", () => {
 // Passer la commande
 checkoutButton.addEventListener("click", () => {
   const total = parseFloat(cartTotal.textContent);
+  
+  // Vérification que le total est un nombre valide
+  if (isNaN(total)) {
+    alert("Erreur : le total du panier n'est pas valide !");
+    return;
+  }
+
   if (total <= userBalance) {
     userBalance -= total; // Déduction du solde
     alert(`Commande passée de ${total} € avec succès ! Votre nouveau solde est de ${userBalance} €.`);
+
     cart = []; // Vider le panier après la commande
-    updateCart();
+    updateCart(); // Mettre à jour l'affichage du panier
+
+    // Mettre à jour l'affichage du solde
+    userBalanceElement.textContent = userBalance;
   } else {
     alert("Solde insuffisant pour passer la commande.");
   }
